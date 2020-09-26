@@ -25,7 +25,7 @@ class SearchInput extends StatelessWidget {
                 decoration: InputDecoration(
                     hintStyle: inputTextStyle(),
                     border: OutlineInputBorder(borderSide: BorderSide.none),
-                    hintText: "Enter the city name..."),
+                    hintText: "City name.."),
               ),
             ),
             GestureDetector(

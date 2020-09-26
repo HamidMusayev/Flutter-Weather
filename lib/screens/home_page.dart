@@ -16,6 +16,8 @@ class _HomePageState extends State<HomePage> {
   List<City> cities = List<City>();
   bool _loading = false;
   TextEditingController cityNameTxt = TextEditingController();
+  PanelController _bottomController = PanelController();
+  bool _bottomOpen = false;
 
   @override
   void initState() {
@@ -45,70 +47,83 @@ class _HomePageState extends State<HomePage> {
             parallaxEnabled: true,
             parallaxOffset: .5,
             backdropEnabled: true,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25.0),
-                topRight: Radius.circular(25.0)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+            controller: _bottomController,
+            onPanelClosed: () {
+              setState(() {
+                _bottomOpen = false;
+              });
+            },
+            onPanelOpened: () {
+              setState(() {
+                _bottomOpen = true;
+              });
+            },
             header: Container(
               height: 65.0,
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 18.0),
               decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(25.0)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
                   color: AppColors.blueBackground),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text("Change city...",
                       style: TextStyle(color: Colors.white, fontSize: 20)),
-                  Icon(Icons.keyboard_arrow_up, color: Colors.white, size: 35)
+                  _bottomOpen == false
+                      ? IconButton(
+                          icon: Icon(Icons.keyboard_arrow_up,
+                              color: Colors.white, size: 35),
+                          onPressed: () {
+                            _bottomController.open();
+                            setState(() {
+                              _bottomOpen = true;
+                            });
+                          })
+                      : IconButton(
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: Colors.white, size: 35),
+                          onPressed: () {
+                            _bottomController.close();
+                            setState(() {
+                              _bottomOpen = false;
+                            });
+                          })
                 ],
               ),
             ),
-            panel: Container(
-              child: SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
+            panel: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
                           color: AppColors.blueBackground,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(25.0),
-                              topRight: Radius.circular(25.0)),
-                        ),
-                        padding: const EdgeInsets.only(
-                            left: 22.0, right: 22.0, top: 80.0, bottom: 22.0),
-                        child: SearchInput(
-                          controller: cityNameTxt,
-                          onPress: () {
-                            setState(() {
-                              _loading = true;
-                              getCities(cityNameTxt.text);
-                            });
-                          },
-                        ),
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0))),
+                      padding: const EdgeInsets.only(
+                          left: 22.0, right: 22.0, top: 80.0, bottom: 22.0),
+                      child: SearchInput(
+                        controller: cityNameTxt,
+                        onPress: () {
+                          setState(() {
+                            _loading = true;
+                            getCities(cityNameTxt.text);
+                          });
+                        },
                       ),
-                      _loading == false
-                          ? ListView.builder(
-                              itemCount: cities.length,
-                              physics: ClampingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text(cities[index].title),
-                                  subtitle:
-                                      Text(cities[index].locationType),
-                                );
-                              })
-                          : Container(
-                        padding: EdgeInsets.only(top: 50.0),
+                    ),
+                    _loading == false
+                        ? buildListView()
+                        : Container(
+                            padding: EdgeInsets.only(top: 50.0),
                             child: Center(
-                                child: CircularProgressIndicator(backgroundColor: AppColors.blueBackground),
-                              ),
+                              child: CircularProgressIndicator(
+                                  backgroundColor: AppColors.blueBackground),
+                            ),
                           )
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -116,5 +131,18 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  buildListView() {
+    return ListView.builder(
+        itemCount: cities.length,
+        physics: ClampingScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(cities[index].title),
+            subtitle: Text(cities[index].locationType),
+          );
+        });
   }
 }
