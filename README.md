@@ -1,4 +1,15 @@
-# weather_app
+# weather_app - still in develop
+
+✅ Getting city data from api
+
+✅ Bottom slide city searching
+
+❗ Loading current city data
+
+❗ Build ui for weather
+
+❗ Showing ui weather
+
 
 A new Flutter application.
 
