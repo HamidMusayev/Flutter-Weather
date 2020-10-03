@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weather_app/data/api.dart';
-import 'package:weather_app/models/city.dart';
+import 'package:weather_app/data/api_weather.dart';
+import 'package:weather_app/models/coordinate.dart';
+import 'package:weather_app/models/weather.dart';
 import 'package:weather_app/utils/app_colors.dart';
 import 'package:weather_app/utils/text_styles.dart';
+import 'package:weather_app/widgets/bottom_button.dart';
 import 'package:weather_app/widgets/search_input.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -13,22 +15,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<City> cities = List<City>();
-  bool _loading = false;
+  Coordinate coordinate = Coordinate();
+  Weather weather = Weather();
+
   TextEditingController cityNameTxt = TextEditingController();
   PanelController _bottomController = PanelController();
-  bool _bottomOpen = false;
+
+  bool _loading = false;
 
   @override
   void initState() {
-    getCities("san");
+    getWeather("baku");
     super.initState();
   }
 
-  void getCities(String cityNameTxt) async {
-    CityApi cityClass = CityApi();
-    await cityClass.getCitiesByName(cityNameTxt);
-    cities = cityClass.cities;
+  void getWeather(String cityName) async {
+    WeatherApi weatherClass = WeatherApi();
+    await weatherClass.getDataByCityName(cityName).whenComplete(() {
+      coordinate = weatherClass.coordinateData;
+      weather = weatherClass.weatherData;
+    });
+
     setState(() {
       _loading = false;
     });
@@ -39,92 +46,56 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Center(
-            child: Text("This is the Widget behind the sliding panel"),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  coordinate.name,
+                  style: cityNameTextStyle(),
+                ),
+                SizedBox(height: 32.0),
+                Text("H " + (weather.tempMax - 273.15).toString() + "°C / L " + (weather.tempMin - 273.15).toString() + "°C")
+              ],
+            ),
           ),
           SlidingUpPanel(
-            minHeight: 65.0,
-            parallaxEnabled: true,
-            parallaxOffset: .5,
-            backdropEnabled: true,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+            minHeight: 24.0,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                blurRadius: 10.0,
+                color: Color.fromRGBO(0, 0, 0, 0.05),
+              )
+            ],
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
             controller: _bottomController,
-            onPanelClosed: () {
-              setState(() {
-                _bottomOpen = false;
-              });
-            },
-            onPanelOpened: () {
-              setState(() {
-                _bottomOpen = true;
-              });
-            },
-            header: Container(
-              height: 65.0,
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(horizontal: 18.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-                  color: AppColors.blueBackground),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            panel: Container(
+              padding: EdgeInsets.only(top: 8.0, left: 20.0, right: 20.0),
+              child: Column(
                 children: <Widget>[
-                  Text("Change city...",
-                      style: TextStyle(color: Colors.white, fontSize: 20)),
-                  _bottomOpen == false
-                      ? IconButton(
-                          icon: Icon(Icons.keyboard_arrow_up,
-                              color: Colors.white, size: 35),
-                          onPressed: () {
-                            _bottomController.open();
-                            setState(() {
-                              _bottomOpen = true;
-                            });
-                          })
-                      : IconButton(
-                          icon: Icon(Icons.keyboard_arrow_down,
-                              color: Colors.white, size: 35),
-                          onPressed: () {
-                            _bottomController.close();
-                            setState(() {
-                              _bottomOpen = false;
-                            });
-                          })
+                  BottomButton(),
+                  SizedBox(height: 18.0),
+                  SearchInput(
+                    controller: cityNameTxt,
+                    onPress: () {
+                      setState(() {
+                        _loading = true;
+                        getWeather(cityNameTxt.text);
+                      });
+                    },
+                  ),
+                  _loading == false
+                      ? buildListView()
+                      : Container(
+                          padding: EdgeInsets.only(top: 50.0),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                                backgroundColor: AppColors.blueBackground),
+                          ),
+                        )
                 ],
-              ),
-            ),
-            panel: SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                          color: AppColors.blueBackground,
-                          borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(25.0))),
-                      padding: const EdgeInsets.only(
-                          left: 22.0, right: 22.0, top: 80.0, bottom: 22.0),
-                      child: SearchInput(
-                        controller: cityNameTxt,
-                        onPress: () {
-                          setState(() {
-                            _loading = true;
-                            getCities(cityNameTxt.text);
-                          });
-                        },
-                      ),
-                    ),
-                    _loading == false
-                        ? buildListView()
-                        : Container(
-                            padding: EdgeInsets.only(top: 50.0),
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                  backgroundColor: AppColors.blueBackground),
-                            ),
-                          )
-                  ],
-                ),
               ),
             ),
           )
@@ -135,13 +106,12 @@ class _HomePageState extends State<HomePage> {
 
   buildListView() {
     return ListView.builder(
-        itemCount: cities.length,
+        itemCount: 1,
         physics: ClampingScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(cities[index].title),
-            subtitle: Text(cities[index].locationType),
+            title: Text(coordinate.lon.toString()),
           );
         });
   }

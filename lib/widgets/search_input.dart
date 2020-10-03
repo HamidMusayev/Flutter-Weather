@@ -14,7 +14,7 @@ class SearchInput extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 18.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(30.0)),
-            color: AppColors.lightBlueBackground),
+            color: AppColors.lightGrey),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -30,7 +30,7 @@ class SearchInput extends StatelessWidget {
             ),
             GestureDetector(
               onTap: onPress,
-              child: Icon(Icons.search, color: AppColors.lightBlue),)
+              child: Icon(Icons.search, color: AppColors.darkerGrey),)
           ],
         ));
   }
