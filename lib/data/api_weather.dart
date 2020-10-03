@@ -32,7 +32,7 @@ class WeatherApi {
         tempMin: jsonData["main"]["temp_min"],
         tempMax: jsonData["main"]["temp_max"],
         //pressure: jsonData["main"]["pressure"],
-        //humidity: jsonData["main"]["humidity"],
+        humidity: jsonData["main"]["humidity"],
       );
       weatherData = weather;
 

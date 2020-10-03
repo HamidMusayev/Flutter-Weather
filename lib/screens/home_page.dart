@@ -52,12 +52,28 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text(coordinate.name, style: cityNameTextStyle()),
+                SizedBox(height: 55.0),
                 Text(
-                  coordinate.name,
-                  style: cityNameTextStyle(),
+                    "H ${(weather.tempMax - 273.15).floor().toString()}°C / L ${(weather.tempMin - 273.15).floor().toString()}°C"),
+                SizedBox(height: 80.0),
+                Text("${(weather.temp - 273.15).floor().toString()}°",
+                    style: weatherBoldTextStyle()),
+                Text(weather.main, style: weatherMainTextStyle()),
+                SizedBox(height: 80.0),
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.beach_access,
+                        color: AppColors.darkGrey, size: 30.0),
+                    Text("${weather.humidity.toString()}%",
+                        style: weatherMainTextStyle())
+                  ],
                 ),
-                SizedBox(height: 32.0),
-                Text("H " + (weather.tempMax - 273.15).toString() + "°C / L " + (weather.tempMin - 273.15).toString() + "°C")
+                SizedBox(height: 8.0),
+                Text(
+                  "${weather.description[0].toUpperCase()}${weather.description.substring(1)}. Feels like ${(weather.feelsLike - 273.15).floor().toString()}°C",
+                  style: weatherDescriptionTextStyle(),
+                ),
               ],
             ),
           ),

@@ -8,7 +8,7 @@ class Weather{
   double tempMin;
   double tempMax;
   //String pressure;
-  //String humidity;
+  int humidity;
 
-  Weather({this.id, this.description, this.icon, this.feelsLike, this.main, this.temp, this.tempMax, this.tempMin});
+  Weather({this.id, this.description, this.icon, this.feelsLike, this.main, this.temp, this.tempMax, this.tempMin, this.humidity});
 }
