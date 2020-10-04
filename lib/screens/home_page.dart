@@ -26,8 +26,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    print("init state");
-    print(weather.main);
     getWeather("baku");
     super.initState();
   }
@@ -140,7 +138,8 @@ class _HomePageState extends State<HomePage> {
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(coordinate.lon.toString()),
+            title: Text(coordinate.lon.toString() + coordinate.lat.toString()),
+            subtitle: Text("//Burada maps olacaq"),
           );
         });
   }
