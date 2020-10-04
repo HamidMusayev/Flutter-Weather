@@ -20,7 +20,7 @@ class TextProvider{
     if (humidity != null){
       return "${humidity.toString()}%";
     } else{
-      return "Loading";
+      return "";
     }
   }
 
