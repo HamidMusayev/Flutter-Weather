@@ -8,6 +8,7 @@ import 'package:weather_app/utils/text_styles.dart';
 import 'package:weather_app/widgets/bottom_button.dart';
 import 'package:weather_app/widgets/search_input.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:weather_app/widgets/top_line.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    print("init state");
     getWeather("baku");
     super.initState();
   }
@@ -46,6 +48,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          Positioned(
+              right: -40.0,
+              top: MediaQuery.of(context).size.height / 4,
+              child: Image.asset("assets/images/icons/${weather.icon}.png",
+                  height: 250.0)),
           Padding(
             padding: const EdgeInsets.only(
                 top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
@@ -53,13 +60,24 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(coordinate.name, style: cityNameTextStyle()),
-                SizedBox(height: 55.0),
+                SizedBox(height: 8.0),
+                TopLine(),
+                SizedBox(height: 10.0),
                 Text(
                     "H ${(weather.tempMax - 273.15).floor().toString()}°C / L ${(weather.tempMin - 273.15).floor().toString()}°C"),
-                SizedBox(height: 80.0),
-                Text("${(weather.temp - 273.15).floor().toString()}°",
-                    style: weatherBoldTextStyle()),
-                Text(weather.main, style: weatherMainTextStyle()),
+                SizedBox(height: 100.0),
+                Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("${(weather.temp - 273.15).floor().toString()}°",
+                            style: weatherBoldTextStyle()),
+                        Text(weather.main, style: weatherMainTextStyle()),
+                      ],
+                    ),
+                  ],
+                ),
                 SizedBox(height: 80.0),
                 Row(
                   children: <Widget>[
@@ -82,7 +100,7 @@ class _HomePageState extends State<HomePage> {
             boxShadow: <BoxShadow>[
               BoxShadow(
                 blurRadius: 10.0,
-                color: Color.fromRGBO(0, 0, 0, 0.05),
+                color: Color.fromRGBO(0, 0, 0, 0.1),
               )
             ],
             borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),

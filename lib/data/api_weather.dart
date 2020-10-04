@@ -14,6 +14,7 @@ class WeatherApi {
     var response = await http.get(url);
     var jsonData = jsonDecode(response.body);
 
+    print("getting data");
     if (jsonData != null) {
       Coordinate coordinate = Coordinate(
         lat: jsonData["coord"]["lat"],
@@ -36,6 +37,7 @@ class WeatherApi {
       );
       weatherData = weather;
 
+      print("done");
     } else {
       print("can't get data");
     }
