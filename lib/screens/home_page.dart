@@ -3,6 +3,7 @@ import 'package:weather_app/data/api_weather.dart';
 import 'package:weather_app/models/coordinate.dart';
 import 'package:weather_app/models/weather.dart';
 import 'package:weather_app/utils/app_colors.dart';
+import 'package:weather_app/utils/text_provider.dart';
 import 'package:weather_app/utils/text_styles.dart';
 import 'package:weather_app/widgets/bottom_button.dart';
 import 'package:weather_app/widgets/search_input.dart';
@@ -26,13 +27,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     print("init state");
+    print(weather.main);
     getWeather("baku");
     super.initState();
   }
 
   void getWeather(String cityName) async {
     WeatherApi weatherClass = WeatherApi();
-    await weatherClass.getDataByCityName(cityName).whenComplete(() {
+    await weatherClass.getDataByCityName(cityName).then((value) {
       coordinate = weatherClass.coordinateData;
       weather = weatherClass.weatherData;
     });
@@ -50,29 +52,27 @@ class _HomePageState extends State<HomePage> {
           Positioned(
               right: -40.0,
               top: MediaQuery.of(context).size.height / 4,
-              child: Image.asset("assets/images/icons/${weather.icon}.png",
-                  height: 250.0)),
+              child: weather.icon != null
+                  ? Image.asset("assets/images/icons/${weather.icon}.png", height: 250.0)
+                  : Container()),
           Padding(
-            padding: const EdgeInsets.only(
-                top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
+            padding: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(coordinate.name, style: cityNameTextStyle()),
+                Text(coordinate.name ?? "Loading..", style: cityNameTextStyle()),
                 SizedBox(height: 8.0),
                 TopLine(),
                 SizedBox(height: 10.0),
-                Text(
-                    "H ${(weather.tempMax - 273.15).floor().toString()}°C / L ${(weather.tempMin - 273.15).floor().toString()}°C"),
+                Text(TextProvider().maxMinTemp(weather.tempMax, weather.tempMin)),
                 SizedBox(height: 100.0),
                 Row(
                   children: <Widget>[
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("${(weather.temp - 273.15).floor().toString()}°",
-                            style: weatherBoldTextStyle()),
-                        Text(weather.main, style: weatherMainTextStyle()),
+                        Text(TextProvider().mainTemp(weather.temp), style: weatherBoldTextStyle()),
+                        Text(weather.main ?? "", style: weatherMainTextStyle()),
                       ],
                     ),
                   ],
@@ -82,15 +82,11 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Icon(Icons.beach_access,
                         color: AppColors.darkGrey, size: 30.0),
-                    Text("${weather.humidity.toString()}%",
-                        style: weatherMainTextStyle())
+                    Text(TextProvider().humidityText(weather.humidity), style: weatherMainTextStyle())
                   ],
                 ),
                 SizedBox(height: 8.0),
-                Text(
-                  "${weather.description[0].toUpperCase()}${weather.description.substring(1)}. Feels like ${(weather.feelsLike - 273.15).floor().toString()}°C",
-                  style: weatherDescriptionTextStyle(),
-                ),
+                Text(TextProvider().descriptionText(weather.description, weather.feelsLike), style: weatherDescriptionTextStyle(),),
               ],
             ),
           ),

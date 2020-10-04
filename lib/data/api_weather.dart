@@ -35,8 +35,6 @@ class WeatherApi {
         humidity: jsonData["main"]["humidity"],
       );
       weatherData = weather;
-    } else {
-      print("can't get data");
     }
   }
 }
