@@ -27,7 +27,7 @@ class TextProvider{
   String descriptionText(String desc, double feelsLike){
     if (desc != null && feelsLike != null){
       String upperDesc = desc[0].toUpperCase() + desc.substring(1);
-      return "$upperDesc. Feels like ${(feelsLike - 273.15).floor().toString()}°C";
+      return "$upperDesc. \nFeels like ${(feelsLike - 273.15).floor().toString()}°C";
     } else{
       return "";
     }
