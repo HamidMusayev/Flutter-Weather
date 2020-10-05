@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(coordinate.lon.toString() + coordinate.lat.toString()),
+            title: Text(coordinate.lon.toString() + " " + coordinate.lat.toString()),
             subtitle: Text("//Burada maps olacaq"),
           );
         });
