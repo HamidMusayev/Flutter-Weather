@@ -53,39 +53,40 @@ class _HomePageState extends State<HomePage> {
               child: weather.icon != null
                   ? Image.asset("assets/images/icons/${weather.icon}.png", height: 250.0)
                   : Container()),
-          Padding(
-            padding: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(coordinate.name ?? "Loading..", style: cityNameTextStyle()),
-                SizedBox(height: 8.0),
-                TopLine(),
-                SizedBox(height: 10.0),
-                Text(TextProvider().maxMinTemp(weather.tempMax, weather.tempMin)),
-                SizedBox(height: 100.0),
-                Row(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(TextProvider().mainTemp(weather.temp), style: weatherBoldTextStyle()),
-                        Text(weather.main ?? "", style: weatherMainTextStyle()),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 80.0),
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.beach_access,
-                        color: AppColors.darkGrey, size: 30.0),
-                    Text(TextProvider().humidityText(weather.humidity), style: weatherMainTextStyle())
-                  ],
-                ),
-                SizedBox(height: 8.0),
-                Text(TextProvider().descriptionText(weather.description, weather.feelsLike), style: weatherDescriptionTextStyle(),),
-              ],
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(coordinate.name ?? "Loading..", style: cityNameTextStyle()),
+                  SizedBox(height: 8.0),
+                  TopLine(),
+                  SizedBox(height: 10.0),
+                  Text(TextProvider().maxMinTemp(weather.tempMax, weather.tempMin)),
+                  SizedBox(height: 100.0),
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(TextProvider().mainTemp(weather.temp), style: weatherBoldTextStyle()),
+                          Text(weather.main ?? "", style: weatherMainTextStyle()),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 80.0),
+                  Row(
+                    children: <Widget>[
+                      weather.humidity != null ? Icon(Icons.beach_access, color: AppColors.darkGrey, size: 30.0) : CircularProgressIndicator(backgroundColor: AppColors.darkGrey),
+                      Text(TextProvider().humidityText(weather.humidity), style: weatherMainTextStyle())
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(TextProvider().descriptionText(weather.description, weather.feelsLike), style: weatherDescriptionTextStyle(),),
+                ],
+              ),
             ),
           ),
           SlidingUpPanel(
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsets.only(top: 50.0),
                           child: Center(
                             child: CircularProgressIndicator(
-                                backgroundColor: AppColors.blueBackground),
+                                backgroundColor: AppColors.darkGrey),
                           ),
                         )
                 ],

@@ -10,7 +10,7 @@ class WeatherApi {
   String apiKey = "821afa39423b94e3d3024a0389accbfa";
 
   Future<void> getDataByCityName(String cityName) async {
-    String url = "http://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=$apiKey";
+    String url = "http://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=821afa39423b94e3d3024a0389accbfa";
     var response = await http.get(url);
     var jsonData = jsonDecode(response.body);
 
