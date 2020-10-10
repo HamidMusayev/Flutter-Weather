@@ -1,4 +1,6 @@
-# weather_app - still in develop
+# Weathviewer
+
+Flutter weather application using Openweathermap API
 
 ✅ Getting city data from api
 
