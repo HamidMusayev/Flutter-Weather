@@ -2,16 +2,6 @@
 
 Flutter weather application using Openweathermap API
 
-✅ Getting city data from api
-
-✅ Bottom slide city searching
-
-❗ Loading current city data
-
-❗ Build ui for weather
-
-❗ Showing ui weather
-
 
 A new Flutter application.
 
