@@ -3,7 +3,22 @@
 Flutter weather application using Openweathermap API
 
 
-A new Flutter application.
+✔ Current ver. : 1.0.0 -stable
+
+✔ Last updated : 12.10.2020
+
+✔ Beautiful UI
+
+✔ Clean code
+
+✅ Apk: https://drive.google.com/file/d/13AKrgjr5ZYLdNQCrwE5egaqfzV5y0a5r/view?usp=sharing
+
+# Screens
+<img src="https://github.com/hemidvs/Flutter-Weather-Api/blob/master/assets/screens/1.jpg?raw=true" width="300"> <img src="https://github.com/hemidvs/Flutter-Weather-Api/blob/master/assets/screens/2.jpg?raw=true" width="300">
+
+<img src="https://github.com/hemidvs/Flutter-Weather-Api/blob/master/assets/screens/3.jpg?raw=true" width="300"> <img src="https://github.com/hemidvs/Flutter-Weather-Api/blob/master/assets/screens/4.jpg?raw=true" width="300"> 
+
+
 
 ## Getting Started
 
